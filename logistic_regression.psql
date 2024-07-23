@@ -1,12 +1,3 @@
-
-create or replace function diff(in a float, in b float)
-    returns float
-    language plpgsql stable
-as $$
-begin
-    return a - b;
-end;
-$$;
 create or replace function dot(in x float[][], in y float[])
 returns float[]
 language plpgsql stable
@@ -70,9 +61,8 @@ as $$
     $$;
 
 
-drop function bin_log_reg;
-create or replace function bin_log_reg (in X float[][], in y float[])
-    returns float[]
+create or replace function fit (in X float[][], in y float[])
+    returns lr_weights
     language plpgsql stable
 as $$
 declare
@@ -109,7 +99,48 @@ begin
         bias := bias - learn_rate * db;
     end loop;
 
-    return weights;
+    return (weights, bias);
 end
 $$;
-select bin_log_reg(ARRAY[ARRAY[1.0, 1.0], ARRAY[0.0, 1.0]]::float[][], ARRAY[1.0, 0.0]::float[]);
+
+create or replace function predict(in X float[][], in weights lr_weights)
+returns float[]
+language plpgsql stable
+as $$
+    declare
+    begin
+        return ARRAY(select sigmoid(weighed_x + weights.bias) from unnest(dot(X, weights.weights)) as weighed_x);
+    end;
+$$;
+
+
+
+
+
+create type lr_weights as
+(
+    weights float[],
+    bias    float
+);
+
+drop function main;
+create or replace function main()
+returns float[]
+language plpgsql
+as $$
+    declare
+        X float[][];
+        y float[];
+        output float[];
+        weights lr_weights;
+    begin
+        X := ARRAY[ARRAY[1.0, 1.0], ARRAY[0.0, 1.0], ARRAY[1.0, 1.0], ARRAY[0.0, 1.0]]::float[][];
+        y := ARRAY[1.0, 0.0, 1.0, 0.0]::float[];
+
+        weights := fit(X, y);
+        output := predict(X, weights);
+
+        return output;
+    end;
+    $$;
+select main();
