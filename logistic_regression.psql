@@ -1,0 +1,37 @@
+
+
+create or replace function bin_log_reg (in tbl regclass)
+--     returns integer[]
+    returns integer
+    language plpgsql stable
+as $$
+    declare
+        bias float = 0;
+        learn_rate float = 0.001;
+
+        n_samples integer;
+        n_features integer;
+        weights float[5];
+
+        pred float[];
+        dz float[];
+        dw float[];
+        db float;
+    begin
+        EXECUTE format('select count(*) from %s', tbl)
+        into n_samples;
+        EXECUTE format('select count(*) from pg_attribute where attrelid = ''%s''::regclass and attnum > 0 and not attisdropped', tbl)
+            into n_features;
+
+        FOR i IN 1..100 LOOP
+            pred =
+
+        END LOOP;
+
+        return db;
+    end
+$$;
+
+
+select * from bin_log_reg('logistic_table');
+
