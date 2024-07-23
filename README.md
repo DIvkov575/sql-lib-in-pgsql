@@ -4,6 +4,17 @@ SQLML - machine learning library implemented in postgres SQL dialect
 stuff
 - linear regression ✅
 - binary logistic regression ✅
+- proc relu ✅
+
+
+- dec sigmoid
+ 
+
+- proc leaky relu
+- dec leaky relu
+- relu neuron
+
+
 - embedded c for linear alg
 - make into extension
   - preprocessing
@@ -11,5 +22,4 @@ stuff
   - lin alg
   - mlp
     - neurons
-- relu (leaky or PreLu) -> neuron
 - neuron -> MLP
