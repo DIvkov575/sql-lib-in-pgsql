@@ -1,0 +1,4 @@
+CREATE OR REPLACE FUNCTION transpose(float[][])
+    RETURNS float[][]
+AS 'MODULE_PATHNAME', 'transpose'
+    LANGUAGE c IMMUTABLE STRICT;

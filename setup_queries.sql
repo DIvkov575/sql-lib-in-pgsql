@@ -3,6 +3,7 @@ create database db1;
 create table tb1 (x float, y float);
 
 -- dataset for 2+x
+select * from linear_tb;
 create table linear_tb(x float, y float);
 insert into linear_tb(x, y)
 values
