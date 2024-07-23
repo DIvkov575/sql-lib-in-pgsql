@@ -1,37 +1,52 @@
 
+create or replace function sigmoid(in x float)
+    returns float
+    language plpgsql stable
+as $$
+    begin
+        return 1 / (1 + power(2.718281828459045, -x));
 
-create or replace function bin_log_reg (in tbl regclass)
+    end;
+    $$;
+
+
+create or replace function bin_log_reg (in X regclass, in Y regclass)
 --     returns integer[]
     returns integer
     language plpgsql stable
 as $$
-    declare
-        bias float = 0;
-        learn_rate float = 0.001;
+declare
+    bias float = 0;
+    learn_rate float = 0.001;
 
-        n_samples integer;
-        n_features integer;
-        weights float[5];
+    n_samples integer;
+    n_features integer;
+    weights float[5];
 
-        pred float[];
-        dz float[];
-        dw float[];
-        db float;
-    begin
-        EXECUTE format('select count(*) from %s', tbl)
-        into n_samples;
-        EXECUTE format('select count(*) from pg_attribute where attrelid = ''%s''::regclass and attnum > 0 and not attisdropped', tbl)
-            into n_features;
+    pred float[];
+    dz float[];
+    dw float[];
+    db float;
+begin
+    execute format('select count(*) from %s', X) into n_samples;
+    execute format('select count(*) from pg_attribute where attrelid = ''%s''::regclass and attnum > 0 and not attisdropped', X) into n_features;
 
-        FOR i IN 1..100 LOOP
-            pred =
+    for i in 1..100 loop
+        execute format('select sigmoid(x) from %s', X) into pred;
+        execute format('select pred - y from %s, %s', unnest(pred), X) into dz;
 
-        END LOOP;
+        dw = (1 / n_samples) *
 
-        return db;
-    end
+    end loop;
+
+    return n_samples;
+end
 $$;
 
 
 select * from bin_log_reg('logistic_table');
 
+-- select *, row_number() over () as id from logistic_table;
+-- select *, row_number() over () as id from logistic_table
+
+-- select x - x0 as test from logistic_table, linear_tb;
