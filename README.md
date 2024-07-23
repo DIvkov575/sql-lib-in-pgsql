@@ -5,14 +5,13 @@ stuff
 - linear regression ✅
 - binary logistic regression ✅
 - proc relu ✅
+- proc leaky relu✅
 
 
 - dec sigmoid
- 
-
-- proc leaky relu
 - dec leaky relu
-- relu neuron
+- mlp config
+- correct file structure/extension
 
 
 - embedded c for linear alg
@@ -22,4 +21,3 @@ stuff
   - lin alg
   - mlp
     - neurons
-- neuron -> MLP

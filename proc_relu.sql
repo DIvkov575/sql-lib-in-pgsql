@@ -53,7 +53,7 @@ end
 $$;
 
 
-create or replace function predict_relu(in X float[][], in weights lr_weights)
+create or replace function predict_relu(in X float[][], in weights relu_weights)
     returns float[]
     language plpgsql stable
 as $$
